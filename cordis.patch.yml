@@ -1,0 +1,14 @@
+# The dsh-jev-goal-judge bundle patch, applied after every shipped bundle layer
+# (dsh-base, dsh-web-app) and before the user's own profile layer.
+#
+# Mount this plugin's goal-round judge. It observes goal rounds through the
+# `agents`, `goals`, and `sessions` services every shipped profile already
+# provides, and registers the optional `/jev-goal-stats` command only when the
+# `commands` service composes. Defaults are shadow mode: judgments are recorded
+# to telemetry and nothing is steered until the profile flips `mode: enforce`.
+- insert:
+    - id: jev-goal-judge
+      name: 'dsh-jev-goal-judge'
+      config:
+        enabled: true
+        mode: shadow

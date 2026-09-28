@@ -1,0 +1,72 @@
+{
+  "name": "dsh-jev-goal-judge",
+  "description": "Jev progress judgment between DeepSeek Harness goal rounds: one bounded typed-decision call at each round boundary steers verify-complete or report-blocked nudges back into the same turn, saving wasted rounds — shadow mode by default, fail-open everywhere",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "README.md",
+    "README.zh.md",
+    "LICENSE",
+    "cordis.patch.yml"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "scripts": {
+    "bundle": "tsdown",
+    "watch": "tsdown --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "jev",
+    "typesafe",
+    "system-one",
+    "decision-model",
+    "goal-loop",
+    "agent-harness"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.2",
+    "@deepseek-ai/dsh-agent": "^0.1.5-rc.3",
+    "@deepseek-ai/dsh-commands": "^0.1.5-rc.3",
+    "@deepseek-ai/dsh-goal": "^0.1.5-rc.3",
+    "@deepseek-ai/dsh-home-paths": "^0.1.5-rc.3",
+    "@deepseek-ai/dsh-llm": "^0.1.5-rc.3",
+    "@deepseek-ai/dsh-session": "^0.1.5-rc.3",
+    "@deepseek-ai/schemastery": "^3.18.2",
+    "@types/node": "^26.6.3",
+    "tsdown": "^0.22.14",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "4.0.2",
+    "@deepseek-ai/dsh-agent": "^0.1.5-rc.3",
+    "@deepseek-ai/dsh-goal": "^0.1.5-rc.3",
+    "@deepseek-ai/dsh-home-paths": "^0.1.5-rc.3",
+    "@deepseek-ai/dsh-llm": "^0.1.5-rc.3",
+    "@deepseek-ai/schemastery": "^3.18.2"
+  },
+  "engines": {
+    "node": ">=20.3"
+  }
+}
