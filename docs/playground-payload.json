@@ -1,0 +1,38 @@
+{
+  "model": "jev-latest",
+  "state": "{\n  \"objective\": \"Ship the release: all tests pass, README updated, changelog written\",\n  \"round\": 3,\n  \"maxRounds\": 12,\n  \"roundDigest\": {\n    \"round\": 3,\n    \"assistantTail\": \"Ran the full test suite: 53 passed. Updated README with the new config table and rewrote the changelog entry. Tagged v0.1.0 locally.\",\n    \"tools\": [\n      {\n        \"name\": \"bash\",\n        \"ok\": true\n      },\n      {\n        \"name\": \"edit\",\n        \"ok\": true\n      },\n      {\n        \"name\": \"bash\",\n        \"ok\": true\n      }\n    ],\n    \"finalMessage\": \"Tests pass, docs are updated, and the release is tagged. Nothing remains.\"\n  },\n  \"previousFinals\": [\n    \"Round 2 finished the config work; release notes still pending.\"\n  ]\n}",
+  "questions": {
+    "achieved": {
+      "type": "noul",
+      "instructions": "The work reported in `roundDigest` satisfies the whole `objective`, not merely a part of it"
+    },
+    "evidence": {
+      "type": "noul",
+      "instructions": "`roundDigest` contains concrete evidence that `objective` is achieved — completed artifacts, passing checks, or verified results — not only a claim that it is done"
+    },
+    "progress": {
+      "type": "score",
+      "instructions": "How much of `objective` did the work in `roundDigest` move toward completion",
+      "levels": [
+        "none",
+        "marginal",
+        "partial",
+        "substantial",
+        "complete"
+      ]
+    },
+    "action": {
+      "type": "choice",
+      "instructions": "Given `objective`, `round`, and `roundDigest`, the single best next action for the agent is",
+      "criteria": {
+        "continue": "The round made progress; keep working in the next round as planned",
+        "verify-complete": "The objective appears achieved; the agent should verify and mark the goal complete now instead of spending another round",
+        "report-blocked": "A concrete obstacle persists across rounds; the agent should report the goal blocked with that condition or take a materially different approach"
+      }
+    },
+    "sameObstacle": {
+      "type": "noul",
+      "instructions": "The obstacle described in `roundDigest.finalMessage` is materially the same obstacle described in `previousFinals`"
+    }
+  }
+}
