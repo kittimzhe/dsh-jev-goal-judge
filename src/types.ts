@@ -23,11 +23,11 @@ export interface ChoiceQuestion {
   readonly criteria: Readonly<Record<string, string>>
 }
 
-/** One Jev `score` question: a position on ordered `levels`, coarsest first. */
+/** One Jev `score` question: a position on ordered `criteria`, coarsest first. */
 export interface ScoreQuestion {
   readonly type: 'score'
   readonly instructions: string
-  readonly levels: readonly string[]
+  readonly criteria: readonly string[]
 }
 
 export type JevQuestion = NoulQuestion | ChoiceQuestion | ScoreQuestion
@@ -126,9 +126,9 @@ export function choice(instructions: string, criteria: Readonly<Record<string, s
   return { type: 'choice', instructions, criteria }
 }
 
-/** Build a `score` question over ordered `levels`, coarsest first. */
-export function score(instructions: string, levels: readonly string[]): ScoreQuestion {
-  return { type: 'score', instructions, levels }
+/** Build a `score` question over ordered `criteria`, coarsest first (wire field name). */
+export function score(instructions: string, criteria: readonly string[]): ScoreQuestion {
+  return { type: 'score', instructions, criteria }
 }
 
 /**

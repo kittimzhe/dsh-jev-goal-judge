@@ -68,8 +68,9 @@ export function lowProgressMass(answers: JevAnswers): number | undefined {
   if (answer === undefined || answer.type !== 'score' || answer.probabilities === undefined) {
     return answer === undefined || answer.type !== 'score' ? undefined : answer.score <= 0.5 ? 1 : 0
   }
-  const none = answer.probabilities['none'] ?? 0
-  const marginal = answer.probabilities['marginal'] ?? 0
+  // Score probabilities arrive keyed by criterion index; 0/1 are none/marginal.
+  const none = answer.probabilities['0'] ?? 0
+  const marginal = answer.probabilities['1'] ?? 0
   return none + marginal
 }
 
