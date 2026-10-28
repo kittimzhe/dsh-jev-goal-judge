@@ -69,14 +69,22 @@ dsh plugin --profile <name> add dsh-jev-goal-judge
     apiKeyEnv: TYPESAFE_API_KEY
 ```
 
-正常使用 goal。shadow 模式下每个轮次边界都被判定并记录；`/jev-goal-stats` 汇总：
+正常使用 goal。shadow 模式下每个轮次边界都被判定并记录；`/jev-goal-stats` 汇总判定数、判定分布、延迟分位与成本。
+
+第一次真实 API 判定（冒烟运行，`provider: typesafe`，单次扇出）：
 
 ```
-[goal-judge] judgments: 12  degraded: 1  steered: 0
-  verdicts: on-track=9  verify-complete=2  report-blocked=1
-  latency: p50 412ms  p95 890ms  max 1104ms
-  input tokens: 7430  est. cost: $0.000312
+answers (828ms, 763 input tokens, $0.000032):
+  achieved (noul)   = 0.83
+  evidence (noul)   = 0.90
+  progress (score)  = 3.94 (confidence 0.95)
+  action (choice)   = verify-complete (confidence 0.97)
+  sameObstacle      = 0.15
+
+verdict: verify-complete (confidence 0.95)
 ```
+
+场景：第 3 轮的"发布收尾"目标——测试全过、文档和 changelog 完成、已打 tag。Jev 路由出 **verify-complete**——与场景真相一致，双闸门都过（achieved 0.83 ≥ 0.75、evidence 0.90 ≥ 0.6），成本 $0.000032、延迟 828ms。阈值变更可在已记录的 answers 上精确重放，这次判定在任何未来阈值下都可复审。
 
 满意 shadow 模式本会 steer 的内容？翻成 `mode: enforce`。
 

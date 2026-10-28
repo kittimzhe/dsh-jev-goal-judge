@@ -1,7 +1,7 @@
 {
   "name": "dsh-jev-goal-judge",
   "description": "Jev progress judgment between DeepSeek Harness goal rounds: one bounded typed-decision call at each round boundary steers verify-complete or report-blocked nudges back into the same turn, saving wasted rounds — shadow mode by default, fail-open everywhere",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publishConfig": {
     "access": "public"
   },

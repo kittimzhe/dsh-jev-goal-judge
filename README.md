@@ -69,14 +69,22 @@ dsh plugin --profile <name> add dsh-jev-goal-judge
     apiKeyEnv: TYPESAFE_API_KEY
 ```
 
-Use goals normally. In shadow mode every round boundary is judged and logged; `/jev-goal-stats` summarizes:
+Use goals normally. In shadow mode every round boundary is judged and logged; `/jev-goal-stats` summarizes judgments, verdict distribution, latency percentiles, and cost.
+
+First live judgment against the real API (smoke run, `provider: typesafe`, one fan-out):
 
 ```
-[goal-judge] judgments: 12  degraded: 1  steered: 0
-  verdicts: on-track=9  verify-complete=2  report-blocked=1
-  latency: p50 412ms  p95 890ms  max 1104ms
-  input tokens: 7430  est. cost: $0.000312
+answers (828ms, 763 input tokens, $0.000032):
+  achieved (noul)   = 0.83
+  evidence (noul)   = 0.90
+  progress (score)  = 3.94 (confidence 0.95)
+  action (choice)   = verify-complete (confidence 0.97)
+  sameObstacle      = 0.15
+
+verdict: verify-complete (confidence 0.95)
 ```
+
+The scenario: round 3 of "ship the release" with tests passing, docs and changelog done, release tagged. Jev routed **verify-complete** — matching ground truth, with both gates cleared (achieved 0.83 ≥ 0.75, evidence 0.90 ≥ 0.6) — for $0.000032 in 828ms. Threshold changes replay exactly over logged answers, so this run can be re-audited at any future thresholds.
 
 Happy with what shadow mode would have steered? Flip `mode: enforce`.
 
