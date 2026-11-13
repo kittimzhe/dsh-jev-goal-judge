@@ -181,10 +181,10 @@ describe('plugin wiring', () => {
     const message = ctx.steered[0] as {
       role: string
       content: Array<{ type: string; text: string }>
-      source: { kind: string; plugin: string }
+      source: { kind: string; goalId: string; round: number }
     }
     expect(message.role).toBe('user')
-    expect(message.source).toEqual({ kind: 'plugin', plugin: 'jev-goal-judge' })
+    expect(message.source).toEqual({ kind: 'goal-judge', goalId: 'g1', round: 2 })
     expect(message.content[0]?.text).toContain('<goal_judge>')
     expect(message.content[0]?.text).toContain('round 2')
   })

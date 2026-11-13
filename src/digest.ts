@@ -135,11 +135,16 @@ export class RoundObserver {
 
   /** Feed one observed session event. */
   observe(agent: unknown, event: ObservedEvent): void {
-    const state = this.state(agent)
+    let state = this.state(agent)
     switch (event.type) {
       case 'turn/start': {
         const turn = (event.data as { turn?: unknown } | undefined)?.turn
-        if (typeof turn === 'number') state.lastTurn = turn
+        if (typeof turn !== 'number') return
+        // Turn numbering restarts when a fresh conversation begins on the same
+        // agent; a regression means stale digest state must not survive.
+        if (turn <= state.lastTurn) this.reset(agent)
+        state = this.state(agent)
+        state.lastTurn = turn
         return
       }
       case 'user/message': {

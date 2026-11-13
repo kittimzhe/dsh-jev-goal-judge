@@ -69,8 +69,25 @@ export type {
 } from './types.ts'
 export { CooldownGate, Semaphore } from './resilience.ts'
 
-/** The `{kind:'plugin'}` source stamped on every note this plugin steers. */
-const PLUGIN_SOURCE = { kind: 'plugin', plugin: 'jev-goal-judge' } as const
+/** Message attribution for judge steering notes (0.2.x merge-extensible source map). */
+export interface GoalJudgeMessageSource {
+  readonly kind: 'goal-judge'
+  readonly goalId: string
+  readonly round: number
+}
+
+declare module '@deepseek-ai/dsh-llm' {
+  interface MessageSourceMap {
+    'goal-judge': GoalJudgeMessageSource
+  }
+}
+
+/** The source stamped on every note this plugin steers. */
+const judgeSource = (goalId: string, round: number): GoalJudgeMessageSource => ({
+  kind: 'goal-judge',
+  goalId,
+  round,
+})
 
 /** Structural slice of the credentials seam (resolved defensively, never injected). */
 interface CredentialsLike {
@@ -182,7 +199,10 @@ export function apply(ctx: Context, config?: Record<string, unknown>): void {
         }
       })
 
-      ctx.on('agent/session-start', ({ agent }) => observer.reset(agent))
+      ctx.on('agent/created', ({ agent }) => {
+        observer.reset(agent)
+        return undefined
+      })
       ctx.on('agent/disposed', ({ agent }) => observer.reset(agent))
 
       ctx.on('agent/turn-stopping', async ({ agent, turn, signal }) => {
@@ -221,7 +241,7 @@ export function apply(ctx: Context, config?: Record<string, unknown>): void {
               agent.steer(
                 createUserMessage({
                   content: [{ type: 'text', text: note }],
-                  source: PLUGIN_SOURCE,
+                  source: judgeSource(goal.id, target.round),
                 }),
               )
             }
